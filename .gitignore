@@ -1,5 +1,6 @@
-.vscode
+*.sln
 bin
 obj
-.sln
+.vscode
 .idea
+.gitignore
