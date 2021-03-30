@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Text.Json;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 namespace Lesson5_5
 {
@@ -43,8 +45,13 @@ namespace Lesson5_5
 				{
 					// save ToDo list and quit from application
 					case 'q':
-						string json = JsonSerializer.Serialize(tasks);
-						File.WriteAllText(filename, json);
+						var options = new JsonSerializerOptions
+						{
+							Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
+							WriteIndented = true
+						};
+						byte[] json = JsonSerializer.SerializeToUtf8Bytes(tasks, options);
+						File.WriteAllBytes(filename, json);
 						quit = true;
 						break;
 
@@ -100,8 +107,8 @@ namespace Lesson5_5
 		{
 			try
 			{
-				string text = File.ReadAllText(filename);
-				ToDo[] tasks = JsonSerializer.Deserialize<ToDo[]>(text);
+				byte[] json = File.ReadAllBytes(filename);
+				ToDo[] tasks = JsonSerializer.Deserialize<ToDo[]>(json);
 				return tasks;
 			}
 			catch
