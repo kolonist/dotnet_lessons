@@ -1,6 +1,0 @@
-*.sln
-bin
-obj
-.vscode
-.idea
-.gitignore
